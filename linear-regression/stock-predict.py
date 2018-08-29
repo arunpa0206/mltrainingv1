@@ -12,6 +12,7 @@ style.use('ggplot')
 #Use Pandas to populate the data frame
 df = Quandl.get("WIKI/AMZN",api_key='tJbUksb_TeZXtwAgDeia')
 df = df[['Adj. Open',  'Adj. High',  'Adj. Low',  'Adj. Close', 'Adj. Volume']]
+print(df.head(5))
 #Calculate percentages
 df['HL_PCT'] = (df['Adj. High'] - df['Adj. Low']) / df['Adj. Low'] * 100.0
 df['PCT_change'] = (df['Adj. Close'] - df['Adj. Open']) / df['Adj. Open'] * 100.0

@@ -17,7 +17,7 @@ import numpy as np
 regressor = DecisionTreeRegressor(max_depth=2)
 regressor.fit(np.array([bikes['temperature']]).T, bikes['count'])
 
-print(regressor.predict(5.))
+print(regressor.predict(5))
 
 #You can visualise the prediction when temperature varies as follows:
 

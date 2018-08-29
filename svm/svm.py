@@ -19,6 +19,8 @@ confidence = clf.score(X_test, y_test)
 print(confidence)
 
 example_measures = np.array([[4,2,1,1,1,2,3,2,1]])
+#-1 in reshape means we want numpy to figure out this dimension
 example_measures = example_measures.reshape(len(example_measures), -1)
+print(example_measures.shape)
 prediction = clf.predict(example_measures)
 print(prediction)
