@@ -12,14 +12,20 @@ style.use('ggplot')
 #Use Pandas to populate the data frame
 df = Quandl.get("WIKI/AMZN",api_key='tJbUksb_TeZXtwAgDeia')
 df = df[['Adj. Open',  'Adj. High',  'Adj. Low',  'Adj. Close', 'Adj. Volume']]
-print(df.head(5))
+#print(df.head(5))
+
+
 #Calculate percentages
 df['HL_PCT'] = (df['Adj. High'] - df['Adj. Low']) / df['Adj. Low'] * 100.0
 df['PCT_change'] = (df['Adj. Close'] - df['Adj. Open']) / df['Adj. Open'] * 100.0
 
+
 #Predict closing values
 df = df[['Adj. Close', 'HL_PCT', 'PCT_change', 'Adj. Volume']]
 forecast_col = 'Adj. Close'
+
+#print(df.head(5))
+
 
 #Replace any NAN so that data is not lost
 df.fillna(value=-99999, inplace=True)
@@ -50,6 +56,8 @@ print('Confidence:', confidence)
 forecast_set = clf.predict(X_lately)
 df['Forecast'] = np.nan
 #Predict for every day after the last day in training set
+print(df.head(0))
+
 last_date = df.iloc[-1].name
 last_unix = last_date.timestamp()
 one_day = 86400

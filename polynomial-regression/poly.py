@@ -34,6 +34,5 @@ lg.fit(X_, y)
 
 # Obtain coefficients
 print(lg.coef_)
-'''
+
 lg.predict(X_test_)
-'''

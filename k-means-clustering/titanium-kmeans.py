@@ -53,6 +53,8 @@ def handle_non_numerical_data(df):
 df = handle_non_numerical_data(df)
 print(df.head())
 
+
+
 df.drop(['boat'], 1, inplace=True)
 df.drop(['sex'], 1, inplace=True)
 

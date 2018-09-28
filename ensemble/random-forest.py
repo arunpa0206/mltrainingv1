@@ -20,13 +20,13 @@ iris = load_iris()
 df = pd.DataFrame(iris.data, columns=iris.feature_names)
 
 # View the top 5 rows
-#print(df.head())
+#print(df.head(5))
 
 # Add a new column with the species names, this is what we are going to try to predict
 df['species'] = pd.Categorical.from_codes(iris.target, iris.target_names)
 
 # View the top 5 rows
-print(df.head())
+#print(df.head(5))
 
 
 
@@ -37,7 +37,7 @@ print(df.head())
 df['is_train'] = np.random.uniform(0, 1, len(df)) <= .75
 
 # View the top 5 rows
-print(df.head())
+print(df.head(2))
 
 
 
@@ -94,6 +94,7 @@ test['species'].head()
 ct=pd.crosstab(test['species'], preds, rownames=['Actual Species'], colnames=['Predicted Species'])
 print(ct)
 '''
+
 # View a list of the features and their importance scores
 list(zip(train[features], clf.feature_importances_))
 '''

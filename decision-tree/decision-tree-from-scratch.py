@@ -1,7 +1,7 @@
 
 
 # For Python 2 / 3 compatability
-from __future__ import print_function
+#from __future__ import print_function
 
 # Toy dataset.
 # Format: each row is an example.

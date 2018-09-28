@@ -118,7 +118,7 @@ from sklearn.manifold import TSNE
 model = TSNE(n_components=2, random_state=0)
 np.set_printoptions(suppress=True)
 vectors = model.fit_transform(vectors)
-
+'''
 
 from sklearn import preprocessing
 normalizer = preprocessing.Normalizer()
@@ -131,3 +131,4 @@ for word in words:
     print(word, vectors[word2int[word]][1])
     ax.annotate(word, (vectors[word2int[word]][0],vectors[word2int[word]][1] ))
 plt.show()
+'''

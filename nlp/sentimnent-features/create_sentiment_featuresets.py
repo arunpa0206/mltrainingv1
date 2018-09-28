@@ -83,6 +83,7 @@ def create_feature_sets_and_labels(pos,neg,test_size = 0.1):
 
 if __name__ == '__main__':
 	train_x,train_y,test_x,test_y = create_feature_sets_and_labels('pos.txt','neg.txt')
+	print(len(train_x))
 	print(train_x[0])
 	print(train_x[1])
 

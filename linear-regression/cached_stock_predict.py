@@ -1,7 +1,7 @@
 import quandl as Quandl, math
 import numpy as np
 import pandas as pd
-from sklearn import preprocessing, cross_validation, svm
+from sklearn import preprocessing,  model_selection as cross_validation, svm
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 from matplotlib import style

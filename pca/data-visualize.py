@@ -1,11 +1,12 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+
 #
 url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
-# load dataset into Pandas DataFrame
+#load dataset into Pandas DataFrame
 df = pd.read_csv(url, names=['sepal length','sepal width','petal length','petal width','target'])
 
-print(df.head())
+print(df.head(1))
 
 from sklearn.preprocessing import StandardScaler
 features = ['sepal length', 'sepal width', 'petal length', 'petal width']

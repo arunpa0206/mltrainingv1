@@ -5,6 +5,7 @@ print(bikes.head())
 #Plot the weather against bike count to see for relationship
 from matplotlib import pyplot as plt
 
+#Plot the input data
 plt.figure(figsize=(8,6))
 plt.plot(bikes['temperature'], bikes['count'], 'o')
 plt.xlabel('temperature')

@@ -6,6 +6,8 @@ X, y = make_regression(n_features=4, n_informative=2,
 
 print('Sample data')
 print(X[0],y[0])
+
+
 regr = RandomForestRegressor(max_depth=2, random_state=0)
 regr.fit(X, y)
 print('Prediction:')
