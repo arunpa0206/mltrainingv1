@@ -118,7 +118,9 @@ plt.show()
 
 from statsmodels.tsa.arima_model import ARIMA
 model = ARIMA(ts_log, order=(2, 1, 0))
+'''
 results_AR = model.fit(disp=-1)
 plt.plot(ts_log_diff)
 plt.plot(results_AR.fittedvalues, color='red')
 plt.title('RSS: %.4f'% sum((results_AR.fittedvalues-ts_log_diff)**2))
+'''
