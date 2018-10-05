@@ -1,2 +1,8 @@
 ./model_data/*
 ./mnist/*
+
+./deep-nn/cnn/model_data/*
+./deep-nn/cnn/mnist/*
+
+./deep-nn/rnn/model_data/*
+./deep-nn/rnn/mnist/*
