@@ -23,7 +23,6 @@ print(y.shape)
 
 print("Classes: ")
 print(numpy.unique(y))
-
 print("Number of words: ")
 print(len(numpy.unique(numpy.hstack(X))))
 
@@ -32,8 +31,6 @@ print("Review length: ")
 result = [len(x) for x in X]
 print("Mean %.2f words (%f)" % (numpy.mean(result), numpy.std(result)))
 # plot review length
-pyplot.boxplot(result)
-pyplot.show()
 
 imdb.load_data(num_words=5000)
 X_train = sequence.pad_sequences(X_train, maxlen=500)
@@ -64,3 +61,4 @@ model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=2, batch_si
 # Final evaluation of the model
 scores = model.evaluate(X_test, y_test, verbose=0)
 print("Accuracy: %.2f%%" % (scores[1]*100))
+'''
