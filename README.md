@@ -17,5 +17,11 @@ install.packages('ggplot2')
 pip3 install CMake
 pip3 install face_recognition
 pip3 install opencv-python
-pip3 install tensorf;ow
+pip3 install boost
+pip3 install tensorfow
 pip3 install tflearn
+
+
+or we can install in one line from anaconda command prompt:
+
+pip3 install CMake face_recognition opencv-python boost tensorflow  tflearn
