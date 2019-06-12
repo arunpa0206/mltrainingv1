@@ -1,0 +1,16 @@
+eclipse.preferences.version=1
+mountpointNode/EXAMPLES/active=true
+mountpointNode/EXAMPLES/address=http\://public-server.knime.com\:80/tomee/ejb
+mountpointNode/EXAMPLES/defaultMountID=EXAMPLES
+mountpointNode/EXAMPLES/factoryID=com.knime.explorer.server.examples
+mountpointNode/EXAMPLES/mountID=EXAMPLES
+mountpointNode/EXAMPLES/mountpointNumber=0
+mountpointNode/EXAMPLES/restPath=/com.knime.enterprise.server/rest
+mountpointNode/EXAMPLES/useRest=false
+mountpointNode/EXAMPLES/user=knime-guest
+mountpointNode/LOCAL/active=true
+mountpointNode/LOCAL/defaultMountID=LOCAL
+mountpointNode/LOCAL/factoryID=org.knime.workbench.explorer.workspace
+mountpointNode/LOCAL/mountID=LOCAL
+mountpointNode/LOCAL/mountpointNumber=1
+mountpointNode/LOCAL/useRest=false

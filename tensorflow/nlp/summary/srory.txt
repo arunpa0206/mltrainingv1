@@ -1,0 +1,21 @@
+Automatic Text Summarization (ATS) is a subfield of Natural Language Processing (NLP).Its goal is to produce the most important cluster of information.ATS is used in a variety of applications, such as news filtering, intelligence gathering, physicians aids, and meeting summarization.
+
+The two types of summarization are:
+
+Extraction-based summarization: The extractive text summarization technique involves pulling keyphrases from the source document and combining them to make a summary.
+
+Example:
+
+Source text: Joseph and Mary rode on a donkey to attend the annual event in Jerusalem. In the city, Mary gave birth to a child named Jesus.
+
+Extractive summary: Joseph and Mary attend event Jerusalem. Mary birth Jesus.
+
+In the above example, the words in bold have been extracted and joined to create a summary  although sometimes the summary can be grammatically strange.
+
+
+
+Abstraction-based summarization: When abstraction is applied for text summarization in deep learning problems, it can overcome the grammar inconsistencies of the extractive method.Here the algorithms create new phrases and sentences.Therefore, abstraction performs better than extraction. However, abstraction algorithms are more difficult to develop hence the use of extraction is still popular.
+
+Example:
+
+Abstractive summary: Joseph and Mary came to Jerusalem where Jesus was born.

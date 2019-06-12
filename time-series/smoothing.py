@@ -38,7 +38,7 @@ print(ts['1949-01-01':'1949-05-01'])
 print(ts['1949'])
 #Visualize the dataset
 plt.plot(ts)
-#plt.show()
+plt.show()
 
 #############################################
 #Identify if data is stationary
@@ -61,7 +61,6 @@ std = plt.plot(rolstd, color='black', label = 'Rolling Std')
 plt.legend(loc='best')
 plt.title('Rolling Mean & Standard Deviation')
 plt.show()
-
 #One of the first tricks to reduce trend can be transformation. For example, in this case we can clearly see that the there is a significant positive trend. So we can apply transformation which penalize higher values more than smaller values. These can be taking a log, square root, cube root, etc. Lets take a log transform here for simplicity:
 ts_log = np.log(ts)
 plt.plot(ts_log)
@@ -81,7 +80,7 @@ ts_log_moving_avg_diff.dropna(inplace=True)
 plt.plot(ts_log)
 plt.plot(ts_log_moving_avg_diff, color='red')
 plt.show()
-
+'''
 from statsmodels.tsa.holtwinters import SimpleExpSmoothing
 # prepare data
 data = ts_log
@@ -90,6 +89,7 @@ model = SimpleExpSmoothing(data)
 
 
 #ACF and PACF plots:
+
 from statsmodels.tsa.stattools import acf, pacf
 
 ts_log_diff = ts_log - ts_log.shift()
@@ -115,12 +115,15 @@ plt.title('Partial Autocorrelation Function')
 plt.tight_layout()
 plt.show()
 
+'''
+
 
 from statsmodels.tsa.arima_model import ARIMA
 model = ARIMA(ts_log, order=(2, 1, 0))
-'''
+
 results_AR = model.fit(disp=-1)
-plt.plot(ts_log_diff)
+#plt.plot(ts_log_diff)
 plt.plot(results_AR.fittedvalues, color='red')
-plt.title('RSS: %.4f'% sum((results_AR.fittedvalues-ts_log_diff)**2))
-'''
+#plt.title('RSS: %.4f'% sum((results_AR.fittedvalues-ts_log_diff)**2))
+
+plt.show()

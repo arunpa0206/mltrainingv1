@@ -1,0 +1,19 @@
+
+{
+    "type":"object",
+    "properties":{
+        "double-input-113":{
+            "type":"object",
+            "properties":{
+                "double":{
+                    "type":"number",
+                    "default":2.5
+                }
+            },
+            "description":"Minimum support for frequent item set mining.",
+            "example":{
+                "double":2.5
+            }
+        }
+    }
+}
