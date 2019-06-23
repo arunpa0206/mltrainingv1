@@ -1,0 +1,287 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "bucket = 'ml-trainings'\n",
+    "prefix = 'sagemaker/DEMO-kmeans-byom'\n",
+    " \n",
+    "# Define IAM role\n",
+    "import boto3\n",
+    "import re\n",
+    " \n",
+    "from sagemaker import get_execution_role\n",
+    "\n",
+    "role = get_execution_role()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import sklearn.cluster\n",
+    "import pickle\n",
+    "import gzip\n",
+    "import urllib.request\n",
+    "import json\n",
+    "import mxnet as mx\n",
+    "import boto3\n",
+    "import time\n",
+    "import io\n",
+    "import os"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "urllib.request.urlretrieve(\"http://deeplearning.net/data/mnist/mnist.pkl.gz\", \"mnist.pkl.gz\")\n",
+    "f = gzip.open('mnist.pkl.gz', 'rb')\n",
+    "train_set, valid_set, test_set = pickle.load(f, encoding='latin1')\n",
+    "f.close()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "kmeans = sklearn.cluster.KMeans(n_clusters=10).fit(train_set[0])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "centroids = mx.ndarray.array(kmeans.cluster_centers_)\n",
+    "mx.ndarray.save('model_algo-1', [centroids])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "model_algo-1\r\n"
+     ]
+    }
+   ],
+   "source": [
+    "!tar czvf model.tar.gz model_algo-1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "boto3.Session().resource('s3').Bucket(bucket).Object(os.path.join(prefix, 'model.tar.gz')).upload_file('model.tar.gz')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "arn:aws:sagemaker:us-east-1:735965530228:model/demo-kmeans-byom-2019-06-17-11-03-31\n"
+     ]
+    }
+   ],
+   "source": [
+    "from sagemaker.amazon.amazon_estimator import get_image_uri\n",
+    "kmeans_model = 'DEMO-kmeans-byom-' + time.strftime(\"%Y-%m-%d-%H-%M-%S\", time.gmtime())\n",
+    "\n",
+    "sm = boto3.client('sagemaker')\n",
+    "container = get_image_uri(boto3.Session().region_name, 'kmeans')\n",
+    "\n",
+    "create_model_response = sm.create_model(\n",
+    "    ModelName=kmeans_model,\n",
+    "    ExecutionRoleArn=role,\n",
+    "    PrimaryContainer={\n",
+    "        'Image': container,\n",
+    "        'ModelDataUrl': 's3://{}/{}/model.tar.gz'.format(bucket, prefix)})\n",
+    "\n",
+    "print(create_model_response['ModelArn'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "DEMO-kmeans-byom-endpoint-config-2019-06-17-11-04-04\n",
+      "Endpoint Config Arn: arn:aws:sagemaker:us-east-1:735965530228:endpoint-config/demo-kmeans-byom-endpoint-config-2019-06-17-11-04-04\n"
+     ]
+    }
+   ],
+   "source": [
+    "kmeans_endpoint_config = 'DEMO-kmeans-byom-endpoint-config-' + time.strftime(\"%Y-%m-%d-%H-%M-%S\", time.gmtime())\n",
+    "print(kmeans_endpoint_config)\n",
+    "create_endpoint_config_response = sm.create_endpoint_config(\n",
+    "    EndpointConfigName=kmeans_endpoint_config,\n",
+    "    ProductionVariants=[{\n",
+    "        'InstanceType': 'ml.m4.xlarge',\n",
+    "        'InitialInstanceCount': 1,\n",
+    "        'ModelName': kmeans_model,\n",
+    "        'VariantName': 'AllTraffic'}])\n",
+    "\n",
+    "print(\"Endpoint Config Arn: \" + create_endpoint_config_response['EndpointConfigArn'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "DEMO-kmeans-byom-endpoint-201906171106\n",
+      "arn:aws:sagemaker:us-east-1:735965530228:endpoint/demo-kmeans-byom-endpoint-201906171106\n",
+      "Status: Creating\n",
+      "Arn: arn:aws:sagemaker:us-east-1:735965530228:endpoint/demo-kmeans-byom-endpoint-201906171106\n",
+      "Status: InService\n",
+      "CPU times: user 250 ms, sys: 12.6 ms, total: 263 ms\n",
+      "Wall time: 8min 32s\n"
+     ]
+    }
+   ],
+   "source": [
+    "%%time\n",
+    "\n",
+    "kmeans_endpoint = 'DEMO-kmeans-byom-endpoint-' + time.strftime(\"%Y%m%d%H%M\", time.gmtime())\n",
+    "print(kmeans_endpoint)\n",
+    "create_endpoint_response = sm.create_endpoint(\n",
+    "    EndpointName=kmeans_endpoint,\n",
+    "    EndpointConfigName=kmeans_endpoint_config)\n",
+    "print(create_endpoint_response['EndpointArn'])\n",
+    "\n",
+    "resp = sm.describe_endpoint(EndpointName=kmeans_endpoint)\n",
+    "status = resp['EndpointStatus']\n",
+    "print(\"Status: \" + status)\n",
+    "\n",
+    "sm.get_waiter('endpoint_in_service').wait(EndpointName=kmeans_endpoint)\n",
+    "\n",
+    "resp = sm.describe_endpoint(EndpointName=kmeans_endpoint)\n",
+    "status = resp['EndpointStatus']\n",
+    "print(\"Arn: \" + resp['EndpointArn'])\n",
+    "print(\"Status: \" + status)\n",
+    "\n",
+    "if status != 'InService':\n",
+    "    raise Exception('Endpoint creation did not succeed')       "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def np2csv(arr):\n",
+    "    csv = io.BytesIO()\n",
+    "    np.savetxt(csv, arr, delimiter=',', fmt='%g')\n",
+    "    return csv.getvalue().decode().rstrip()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "runtime = boto3.Session().client('runtime.sagemaker')\n",
+    "\n",
+    "payload = np2csv(train_set[0][0:100])\n",
+    "response = runtime.invoke_endpoint(EndpointName=kmeans_endpoint,\n",
+    "                                   ContentType='text/csv',\n",
+    "                                   Body=payload)\n",
+    "result = json.loads(response['Body'].read().decode())\n",
+    "scored_labels = np.array([r['closest_cluster'] for r in result['predictions']])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([ True,  True,  True,  True,  True,  True,  True,  True,  True,\n",
+       "        True,  True,  True,  True,  True,  True,  True,  True,  True,\n",
+       "        True,  True,  True,  True,  True,  True,  True,  True,  True,\n",
+       "        True,  True,  True,  True,  True,  True,  True,  True,  True,\n",
+       "        True,  True,  True,  True,  True,  True,  True,  True,  True,\n",
+       "        True,  True,  True,  True,  True,  True,  True,  True,  True,\n",
+       "        True,  True,  True,  True,  True,  True,  True,  True,  True,\n",
+       "        True,  True,  True,  True,  True,  True,  True,  True,  True,\n",
+       "        True,  True,  True,  True,  True,  True,  True,  True,  True,\n",
+       "        True,  True,  True,  True,  True,  True,  True,  True,  True,\n",
+       "        True,  True,  True,  True,  True,  True,  True,  True,  True,\n",
+       "        True])"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "scored_labels == kmeans.labels_[0:100]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "conda_amazonei_mxnet_p36",
+   "language": "python",
+   "name": "conda_amazonei_mxnet_p36"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
