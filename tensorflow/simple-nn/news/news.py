@@ -12,11 +12,12 @@ print('# of Classes: {}'.format(num_classes))
 # of Training Samples: 8982
 # of Test Samples: 2246
 # of Classes: 46
+
 index_to_word = {}
 for key, value in word_index.items():
     index_to_word[value] = key
-print(' '.join([index_to_word[x] for x in x_train[0]]))
-print(y_train[0])
+#print(' '.join([index_to_word[x] for x in x_train[1]]))
+#print(y_train[1])
 
 from keras.preprocessing.text import Tokenizer
 

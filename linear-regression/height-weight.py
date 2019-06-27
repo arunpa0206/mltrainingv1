@@ -32,4 +32,4 @@ plt.ylabel("weight")
 plt.show()
 
 #Make predictions
-print('Weight for heoght = 5.2',reg.predict(X=6.2))
+print('Weight for heoght = 5.2',reg.predict(X=[[6.2]]))
