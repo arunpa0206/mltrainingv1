@@ -52,7 +52,7 @@ print('Number of observations in the test data:',len(test))
 features = df.columns[:4]
 
 # View features
-print(features)
+print('Features:',features)
 
 
 # train['species'] contains the actual species names. Before we can use it,
@@ -79,9 +79,9 @@ RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
 
 
 # Apply the Classifier we trained to the test data (which, remember, it has never seen before)
-print(clf.predict(test[features]))
+print('Prediction of test samples:',clf.predict(test[features]))
 # View the predicted probabilities of the first 10 observations
-print(clf.predict_proba(test[features])[0:10])
+#print('clf.predict_proba(test[features]:', clf.predict_proba(test[features])[0:10])
 
 # Create actual english names for the plants for each predicted plant class
 preds = iris.target_names[clf.predict(test[features])]

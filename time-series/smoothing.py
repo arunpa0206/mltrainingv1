@@ -86,7 +86,7 @@ from statsmodels.tsa.holtwinters import SimpleExpSmoothing
 data = ts_log
 # create class
 model = SimpleExpSmoothing(data)
-
+'''
 
 #ACF and PACF plots:
 
@@ -115,7 +115,7 @@ plt.title('Partial Autocorrelation Function')
 plt.tight_layout()
 plt.show()
 
-'''
+
 
 
 from statsmodels.tsa.arima_model import ARIMA
